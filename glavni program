@@ -1,0 +1,364 @@
+#include <iostream>
+#include <cstdlib>
+#include <cstring>
+using namespace std;
+
+#include "red_pokazivac.h"
+//#include "red_polje.h"
+
+int godina=2012,mjesec=12,dan=14, brojac = 1, n, m = 0;
+klijenti klijent[1000];
+
+int mjeseci(){
+     int broj=0, ispravno;
+     string mjesec;
+     string sijecanj ("sijecanj");
+     string veljaca ("veljaca");
+     string ozujak ("ozujak");
+     string travanj ("travanj");
+     string svibanj ("svibanj");
+     string lipanj ("lipanj");
+     string srpanj ("srpanj");
+     string kolovoz ("kolovoz");
+     string rujan ("rujan");
+     string listopad ("listopad");
+     string studeni ("studeni");
+     string prosinac ("prosinac");
+     do{
+                 cout<<"mjesec: ";
+                 cin >> mjesec;
+                 ispravno = true;
+                 if (mjesec == sijecanj) broj = 1;
+                 else if (mjesec == veljaca) broj = 2;
+                 else if (mjesec == ozujak) broj = 3;
+                 else if (mjesec == travanj) broj = 4;
+                 else if (mjesec == svibanj) broj = 5;
+                 else if (mjesec == lipanj) broj = 6;
+                 else if (mjesec == srpanj) broj = 7;
+                 else if (mjesec == kolovoz) broj = 8;
+                 else if (mjesec == rujan) broj = 9;
+                 else if (mjesec == listopad) broj = 10;
+                 else if (mjesec == studeni) broj = 11;
+                 else if (mjesec == prosinac) broj = 12;
+                 else {
+                      cout << "niste ispravno unijeli mjesec ili mjesec ne postoji... pisite malim slovima... " << endl; 
+                      ispravno = false;
+                      }
+     }while(ispravno != true);
+     return broj;
+}//mjeseci
+     
+void ispis_mjeseca(int broj){
+     string sijecanj ("sijecanj");
+     string veljaca ("veljaca");
+     string ozujak ("ozujak");
+     string travanj ("travanj");
+     string svibanj ("svibanj");
+     string lipanj ("lipanj");
+     string srpanj ("srpanj");
+     string kolovoz ("kolovoz");
+     string rujan ("rujan");
+     string listopad ("listopad");
+     string studeni ("studeni");
+     string prosinac ("prosinac");
+     
+                 if (broj == 1) cout << sijecanj;
+                 else if (broj == 2) cout << veljaca;
+                 else if (broj == 3) cout << ozujak;
+                 else if (broj == 4) cout << travanj;
+                 else if (broj == 5) cout << svibanj;
+                 else if (broj == 6) cout << lipanj;
+                 else if (broj == 7) cout << srpanj;
+                 else if (broj == 8) cout << kolovoz;
+                 else if (broj == 9) cout << rujan;
+                 else if (broj == 10) cout << listopad;
+                 else if (broj == 11) cout << studeni;
+                 else if (broj == 12) cout << prosinac;
+}//ispis_mjeseca
+
+void izmjena_datuma(){
+     cout << "trenutne postavke datuma: "<<dan<<". "; ispis_mjeseca(mjesec);cout<<" "<<godina<<"."<<endl;
+     char da = 'n';
+     do{
+     cout<<"dan: ";    cin>>dan;
+     mjesec=mjeseci();
+     cout<<"godina: "; cin>>godina;
+     cout << "nove postavke datuma: "<<dan<<". "; ispis_mjeseca(mjesec);cout<<" "<<godina<<"."<<endl;
+          cout << "prihvacate nove postavke (d/n): "; cin >> da;
+     }while(da != 'd');
+}//izmjena datuma
+
+void generiranje(int n){    
+     srand(time(0));
+        for (int i=0;i<n;i++){
+        int broj;
+        broj = rand()/(RAND_MAX/501);
+        if (broj < 100) 
+           broj = broj + 100;
+        klijent[i].ai = broj; 
+
+        klijent[i].bi = (klijent[i].ai - 69) / 2 ;
+        if (klijent[i].bi < 100) 
+           klijent[i].bi = klijent[i].bi + 100;
+
+        klijent[i].ci = broj%6+1; 
+     
+        klijent[i].di = broj%4+1; 
+     }
+
+}//generiranje
+
+void ispis_prioritet(int broj){
+     cout<<"prioritet: ";
+     switch(broj){
+ 	   case 1: cout << "umirovljenik/ca" << endl;  break;    
+       case 2: cout << "invalid" << endl; 	       break;
+       case 3: cout << "trudnica" << endl;	       break;
+       case 4: cout << "VIP klijent" << endl;      break;
+       case 5: cout << "klijent" << endl;          break;
+       case 6: cout << "nije klijent" << endl;     break;
+     };  
+}//ispis prioritet
+
+void ispis_transakcija(int broj){
+     cout<<"transakcija: ";
+     switch(broj){
+ 	   case 1: cout << "uplata" << endl;                     break;    
+       case 2: cout << "isplata" << endl; 	                 break;
+       case 3: cout << "placanje racuna" << endl;        	 break;
+       case 4: cout << "krediti" << endl;                    break;
+     };  
+}//ispis transakcija
+
+void sort(){
+  for(int i=(n); i>0; i--)                                     
+     {
+       for(int j=0; j<i; j++)
+         if(klijent[j].ci > klijent[i].ci)
+        {
+          klijenti pomocni_klijent = klijent[j];
+          klijent[j] = klijent[i];
+          klijent[i] = pomocni_klijent;
+        }
+     }
+}//sort
+
+void upis(int n){     
+      RED Rpom;
+      InitQ(Rpom);
+      int razlikaG, razlikaM;
+      for (int i=0; i<n;i++)
+      {
+        klijent[i].ime_prezime = brojac;
+        cout<<endl<<"Ime i prezime: "<<klijent[i].ime_prezime<<". klijent"<<endl;
+        
+        int god=rand()% 81 +10;
+        klijent[i].godina=god;
+        cout<<"starost: "<<klijent[i].godina<<endl;
+        
+        klijent[i].datum_godina=godina-klijent[i].godina;
+        int mjesec=rand()%12+1;
+        klijent[i].datum_mjesec=mjesec;
+        int dan=rand()% 30+1;
+        klijent[i].datum_dan=dan;
+        cout<<"datum rodenja: "<<klijent[i].datum_dan<<". "; ispis_mjeseca(klijent[i].datum_mjesec);cout<<" "<<klijent[i].datum_godina<<"."<<endl;
+       
+        int broj=rand()%5000+1;
+        cout<<"Stanje na tekucem racunu: ",klijent[i].tekuci_racun=broj, cout<<klijent[i].tekuci_racun<<" kn"<<endl;
+        
+        int broj2=rand()%4901+10;
+        cout<<"Stanje na deviznom racunu: ",klijent[i].devizni_racun=broj2, cout<<klijent[i].devizni_racun<<" EUR"<<endl;
+        
+        ispis_prioritet(klijent[i].ci);
+        
+        ispis_transakcija(klijent[i].di);
+ 
+         EnQueueQ(klijent[i],Rpom); 
+         brojac++;    
+      }  
+    sort(); 
+    InitQ(R);
+    for(int i=0;i<n;i++){ 
+      klijent[i].ime_prezime;
+      klijent[i].godina;
+      klijent[i].datum_dan,klijent[i].datum_mjesec,klijent[i].datum_godina;
+      klijent[i].tekuci_racun;
+      klijent[i].devizni_racun;
+      klijent[i].ci;
+      klijent[i].di;
+      EnQueueQ(klijent[i],R);            
+   }
+    
+    
+      cout << endl <<"-------------------------------------------------------------------------------"<<endl;
+      cout << "Klijenti koji na racunu imaju vise od 10.000,00 kuna u stranoj valuti (EUR)"<<endl;
+      cout << "-------------------------------------------------------------------------------"<<endl;
+      for(int i=0;i<n;i++){
+         if(klijent[i].devizni_racun*7.50>10000){
+             cout<<endl<<"Ime i prezime: "<<klijent[i].ime_prezime<<". klijent"<<endl;
+             cout<<"Iznos deviznog racuna (EUR): "<<klijent[i].devizni_racun<<endl;
+             cout<<"Iznos deviznog racuna (HRK): "<<(klijent[i].devizni_racun*7.50)<<endl;
+             ispis_prioritet(klijent[i].ci);
+             ispis_transakcija(klijent[i].di);
+             cout<<"datum rodenja: "<<klijent[i].datum_dan<<". "; ispis_mjeseca(klijent[i].datum_mjesec);cout<<" "<<klijent[i].datum_godina<<"."<<endl;
+             cout<<"starost: "<<klijent[i].godina<<endl;
+             cout << "------------------------------"<<endl;
+         }  
+      }  
+}//upis
+
+void brzi(){
+  RED R2,R3;
+  InitQ(R2);
+  InitQ(R3);  
+  
+  
+  while(!IsEmptyQ(R))  {
+    if(FrontQ(R).di == 3)    {
+      EnQueueQ(FrontQ(R), R2);
+    }
+    else
+      EnQueueQ(FrontQ(R), R3);
+    DeQueueQ(R);
+   }
+  
+  InitQ(R); 
+  cout << "------------------------------"<<endl;
+  cout << "stanje brzog reda:" << endl;
+  cout << "------------------------------"<<endl;
+  while(!IsEmptyQ(R2)){
+    cout<<endl<<"Ime i prezime: "<<FrontQ(R2).ime_prezime<<". klijent"<<endl;
+    ispis_prioritet(FrontQ(R2).ci);
+    ispis_transakcija(FrontQ(R2).di);
+    cout<<"datum rodenja: "<<FrontQ(R2).datum_dan<<". "; ispis_mjeseca(FrontQ(R2).datum_mjesec);cout<<" "<<FrontQ(R2).datum_godina<<"."<<endl;
+    cout<<"starost: "<<FrontQ(R2).godina<<endl;
+    cout<<"Stanje na tekucem racunu: "<<FrontQ(R2).tekuci_racun<<" kn"<<endl;
+    cout<<"Stanje na deviznom racunu: "<<FrontQ(R2).devizni_racun<<" EUR"<<endl;
+    cout << "------------------------------"<<endl;
+    
+    EnQueueQ(FrontQ(R2), R);
+    DeQueueQ(R2);
+  }
+   cout << "------------------------------"<<endl;
+   cout <<"stanje glavnog reda:" << endl;
+   cout << "------------------------------"<<endl;
+   while(!IsEmptyQ(R3)){
+    cout<<endl<<"Ime i prezime: "<<FrontQ(R3).ime_prezime<<". klijent"<<endl;
+    ispis_prioritet(FrontQ(R3).ci);
+    ispis_transakcija(FrontQ(R3).di);
+    cout<<"datum rodenja: "<<FrontQ(R3).datum_dan<<". "; ispis_mjeseca(FrontQ(R3).datum_mjesec);cout<<" "<<FrontQ(R3).datum_godina<<"."<<endl;
+    cout<<"starost: "<<FrontQ(R3).godina<<endl;
+    cout<<"Stanje na tekucem racunu: "<<FrontQ(R3).tekuci_racun<<" kn"<<endl;
+    cout<<"Stanje na deviznom racunu: "<<FrontQ(R3).devizni_racun<<" EUR"<<endl;
+    cout << "------------------------------"<<endl;
+    EnQueueQ(FrontQ(R3), R);
+    DeQueueQ(R3);
+  }
+}//brzi
+
+void VIP_umirovljenici(){
+  RED R4,R5;
+  InitQ(R4);
+  InitQ(R5);
+  while(!IsEmptyQ(R)){
+    EnQueueQ(FrontQ(R), R4);
+    DeQueueQ(R);
+  } 
+  while(!IsEmptyQ(R4)){
+      if((FrontQ(R4).ci==4 &&  FrontQ(R4).di==1 && FrontQ(R4).godina<30)||(FrontQ(R4).ci==4 && FrontQ(R4).di==2 && FrontQ(R4).tekuci_racun>5000 ))
+         DeQueueQ(R4);
+      else{
+         EnQueueQ(FrontQ(R4),R5);
+         DeQueueQ(R4);
+      }
+   }
+   InitQ(R);
+   cout << "--------------------------------------------------------------"<<endl;
+   cout<<endl<<"stanje u redu nakon brisanja VIP klijenata i umirovljenika"<<endl;
+   cout << "--------------------------------------------------------------"<<endl;
+   while(!IsEmptyQ(R5)){
+      cout<<endl<<"Ime i prezime: "<<FrontQ(R5).ime_prezime<<". klijent"<<endl;
+      ispis_prioritet(FrontQ(R5).ci);
+      ispis_transakcija(FrontQ(R5).di);
+      cout<<"Datum rodjenja: "<<FrontQ(R5).datum_dan<<"."<<FrontQ(R5).datum_mjesec<<"."<<FrontQ(R5).datum_godina<<endl;
+      cout<<"Broj Godina: "<<FrontQ(R5).godina<<endl;
+      cout<<"Stanje na tekucem racunu: "<<FrontQ(R5).tekuci_racun<<" kn"<<endl;
+      cout<<"Stanje na deviznom racunu: "<<FrontQ(R5).devizni_racun<<" EUR"<<endl;                    
+      cout << "------------------------------"<<endl;                    
+      EnQueueQ(FrontQ(R5), R);
+      DeQueueQ(R5);                    
+   }    
+}//vip umirovljenici
+
+void novi_salter(int m){
+     float postotak = m*0.7;
+     cout << "------------------------------"<<endl;
+     cout << "stanje u redu novog saltera: "<<endl;
+     cout << "------------------------------"<<endl;
+     for (int i=m-1; i>=postotak; i--){
+         cout<<endl<<"Ime i prezime: "<<klijent[i].ime_prezime<<". klijent"<<endl;
+         cout<<"Iznos deviznog racuna (EUR): "<<klijent[i].devizni_racun<<endl;
+         cout<<"Iznos deviznog racuna (HRK): "<<(klijent[i].devizni_racun*7.50)<<endl;
+         ispis_prioritet(klijent[i].ci);
+         ispis_transakcija(klijent[i].di);
+         cout<<"datum rodenja: "<<klijent[i].datum_dan<<". "; ispis_mjeseca(klijent[i].datum_mjesec);cout<<" "<<klijent[i].datum_godina<<"."<<endl;
+         cout<<"starost: "<<klijent[i].godina<<endl;
+         cout << "------------------------------"<<endl;
+         }
+     cout << endl << "------------------------------"<<endl;
+     cout << "stanje u redu starog saltera: "<<endl;
+     cout << "------------------------------"<<endl;
+     for (int i=1; i<postotak; i++){
+         cout<<endl<<"Ime i prezime: "<<klijent[i].ime_prezime<<". klijent"<<endl;
+         cout<<"Iznos deviznog racuna (EUR): "<<klijent[i].devizni_racun<<endl;
+         cout<<"Iznos deviznog racuna (HRK): "<<(klijent[i].devizni_racun*7.50)<<endl;
+         ispis_prioritet(klijent[i].ci);
+         ispis_transakcija(klijent[i].di);
+         cout<<"datum rodenja: "<<klijent[i].datum_dan<<". "; ispis_mjeseca(klijent[i].datum_mjesec);cout<<" "<<klijent[i].datum_godina<<"."<<endl;
+         cout<<"starost: "<<klijent[i].godina<<endl;
+         cout << "------------------------------"<<endl;
+         }
+}//novi salter
+
+int main(){
+    int izbor;
+    do{
+    cout<<endl<<"-------------------SIMULACIJA REDA U BANCI--------------------"<<endl<<endl;
+    cout<<"1 - Funkcija za generiranje niza od N cetvorki i upis...  "<<endl;
+    cout<<"2 - Simulacija brzog reda... "<<endl;
+    cout<<"3 - Brisanje VIP (<30 g. i uplata) i umirovljenici (<100kn)..."<<endl;
+    cout<<"4 - otvaranje novog reda..."<<endl;
+    cout<<"5 - izmjena datuma..."<<endl;
+    cout<<"9 - izlaz iz programa..."<<endl<<endl;
+    cout<<"Vas izbor: ";
+    cin>>izbor;
+    switch(izbor){
+                case 1: 
+                   cout<<"koliko N cetvorki: ";
+                   cin>>n;
+                   generiranje(n);
+                   upis(n);
+                   m = m + n;
+                   break;
+                case 2:
+                   brzi();
+                   break;
+                case 3:
+                   VIP_umirovljenici();
+                   break;
+                   case 4:
+                   novi_salter(m);
+                   break;
+                case 5:
+                   izmjena_datuma();
+                   break;
+                case 9: 
+                   break; 
+                default: 
+                   cout<<"Unijeli ste krivi broj..."<<endl;
+                   break;
+                                  
+       }
+    }while(izbor!=9);
+return 0;
+}//main
